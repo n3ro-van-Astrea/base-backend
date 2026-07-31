@@ -1,0 +1,17 @@
+# Системные файлы KDE / Dolphin
+.directory
+.DS_Store
+
+# Скомпилированные бинарники Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+base_backend
+
+# Переменные окружения
+.env
+EOT
