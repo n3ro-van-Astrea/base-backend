@@ -4,7 +4,6 @@ import (
 	"base_backend/internal/models"
 	"errors"
 	"fmt"
-	"html/template"
 	"net/http"
 	"strconv"
 )
@@ -15,25 +14,32 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Важно: файл с базовым шаблоном должен идти ПЕРВЫМ в срезе!
-	files := []string{
-		"./ui/html/base.html",
-		"./ui/html/partials/nav.html",
-		"./ui/html/pages/home.html",
-	}
-
-	// Передаем срез путей как вариативный аргумент (через ...)
-	ts, err := template.ParseFiles(files...)
+	snippets, err := app.snippets.Latest()
 	if err != nil {
 		app.serverError(w, err)
 		return
 	}
 
-	// Метод ExecuteTemplate указывает Go, что рендерить нужно именно "base"
-	err = ts.ExecuteTemplate(w, "base", nil)
-	if err != nil {
-		app.serverError(w, err)
+	for _, snippet := range snippets {
+		fmt.Fprintf(w, "%+v\n", snippet)
 	}
+
+	//files := []string{
+	//	"./ui/html/base.html",
+	//	"./ui/html/partials/nav.html",
+	//	"./ui/html/pages/home.html",
+	//}
+
+	//ts, err := template.ParseFiles(files...)
+	//if err != nil {
+	//	app.serverError(w, err)
+	//	return
+	//}
+
+	//err = ts.ExecuteTemplate(w, "base", nil)
+	//if err != nil {
+	//	app.serverError(w, err)
+	//}
 }
 
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
